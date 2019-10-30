@@ -1,7 +1,16 @@
 # Moleculer Simple MySQL Mixin
+Provide this.db object in service with async queries.
 
 ## Prepare
 Set env MYSQL_URL (see: example.env)
+
+## Methods
+- query
+- results
+- row
+- col
+- var
+- insert
 
 ## Use
 In service

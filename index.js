@@ -2,22 +2,35 @@
  * Simple MySQL
  */
 class Db {
+    /**
+     * @param {} pool mysql2 pool
+     * @param {} logger moleculer broker.logger
+     */
     constructor(pool, logger) {
         this._pool = pool;
         this._logger = logger;
         this._logger.debug('MySQL:connect');
     }
 
+    /**
+     * @returns {*}
+     */
     provider() {
         return this._pool;
     }
 
+    /**
+     * Emulate query
+     * @param {String} sql
+     * @param {{}} params
+     * @returns {Promise<string>} raw query
+     */
     async emu(sql, params = {}) {
         return this._pool.format(sql, params);
     }
 
     /**
-     * Query
+     * Run query
      * @param {String} sql
      * @param {{}} params
      * @returns {Promise<*>}
@@ -36,11 +49,11 @@ class Db {
      * Fetch array of objects
      * @param {String} sql
      * @param {{}} params
-     * @returns {Promise<Array>}
+     * @returns {Promise<Array>} if no results, return empty array []
      */
     async rows(sql, params = {}) {
         const result = await this.query(sql, params);
-        if (!result) return null;
+        if (!result) return [];
         const [rows] = result;
         return rows;
     }
@@ -49,13 +62,27 @@ class Db {
      * Fetch row
      * @param {String} sql
      * @param {{}} params
-     * @returns {Promise<Object>}
+     * @returns {Promise<Object>} if no results, return empty object {}
      */
     async row(sql, params = {}) {
         const rows = await this.rows(sql, params);
-        if (!rows) return null;
+        if (!rows) return {};
         const [row] = rows;
         return row;
+    }
+
+    /**
+     * Fetch column (first column of query)
+     * @param {String} sql
+     * @param {{}} params
+     * @returns {Promise<Array>} if no results, return empty array []
+     */
+    async col(sql, params = {}) {
+        const result = await this.query(sql, params);
+        if (!result) return [];
+        const [rows] = result;
+        const [prop] = Object.keys(rows[0]);
+        return rows.map(i => i[prop]);
     }
 
     /**
