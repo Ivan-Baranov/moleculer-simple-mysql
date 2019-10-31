@@ -1,3 +1,7 @@
+if (!process.env.MYSQL_URL) {
+    throw new Error('ENV: MYSQL_URL not defined')
+}
+
 /**
  * Simple MySQL
  */
