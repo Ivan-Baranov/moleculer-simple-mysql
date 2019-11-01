@@ -82,9 +82,8 @@ class Db {
      * @returns {Promise<Array>} if no results, return empty array []
      */
     async col(sql, params = {}) {
-        const result = await this.query(sql, params);
-        if (!result) return [];
-        const [rows] = result;
+        const rows = await this.rows(sql, params);
+        if (!rows.length) return [];
         const [prop] = Object.keys(rows[0]);
         return rows.map(i => i[prop]);
     }
