@@ -70,7 +70,7 @@ class Db {
      */
     async row(sql, params = {}) {
         const rows = await this.rows(sql, params);
-        if (!rows) return {};
+        if (!rows.length) return {};
         const [row] = rows;
         return row;
     }
