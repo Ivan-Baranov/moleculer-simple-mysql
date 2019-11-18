@@ -1,3 +1,6 @@
+const {URL} = require('url');
+const mysql2 = require('mysql2/promise');
+
 if (!process.env.MYSQL_URL) {
     throw new Error('ENV: MYSQL_URL not defined')
 }
@@ -7,8 +10,8 @@ if (!process.env.MYSQL_URL) {
  */
 class Db {
     /**
-     * @param {} pool mysql2 pool
-     * @param {} logger moleculer broker.logger
+     * @param {mysql2.pool} pool mysql2 pool
+     * @param {{}} logger moleculer service.logger
      */
     constructor(pool, logger) {
         this._pool = pool;
@@ -123,9 +126,10 @@ class Db {
 
 module.exports = {
     created() {
-        const {logger} = this.broker;
-        const pool = require('mysql2/promise').createPool(process.env.MYSQL_URL);
-        this.db = new Db(pool, logger);
+        const url = new URL(process.env.MYSQL_URL);
+        url.searchParams.set('namedPlaceholders', '1');
+        const pool = mysql2.createPool(url.toString());
+        this.db = new Db(pool, this.logger);
     },
     stopped() {
         this.db.end();
