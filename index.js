@@ -40,13 +40,8 @@ class Db {
      * @returns {Promise<*>}
      */
     async query(sql, params = {}) {
-        this._logger.debug('MySQL:', { sql, params });
-        try {
-            return await this._pool.query(sql, params);
-        } catch (e) {
-            this._logger.error('MySQL:Error:', e.message);
-            throw new Error('MySQL Error: ' + e.message);
-        }
+        this._logger.debug('MySQL:Query:', { sql, params });
+        return await this._pool.query(sql, params);
     }
 
     /**
