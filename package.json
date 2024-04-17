@@ -7,6 +7,6 @@
   "author": "Ivan Baranov <i.m.baranov@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "mysql2": "^2.0.0"
+    "mysql2": "^3.9.4"
   }
 }
